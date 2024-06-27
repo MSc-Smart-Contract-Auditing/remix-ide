@@ -13,14 +13,14 @@ jobs:
 
     steps:
     - name: Checkout repository
-    - uses: actions/checkout@v4
+      uses: actions/checkout@v4
 
     - name: Set up Node.js
-    - uses: actions/setup-node@v4
+      uses: actions/setup-node@v4
       with:
         node-version: 22
         cache: 'npm'
-    - run: npm ci
+      run: npm ci
 
     - name: Run tests
       run: ng test --no-watch --no-progress --browsers=ChromeHeadless
