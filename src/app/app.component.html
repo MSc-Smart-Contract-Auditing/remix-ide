@@ -1,1 +1,7 @@
-<h1>Hello there! {{ title }}</h1>
+<!-- <button (click)="loadFiles()">Load Files</button> -->
+<h3>Selected file</h3>
+<p>{{ currentFile }}</p>
+
+<div *ngFor="let file of files">
+    <p>{{ file }}</p>
+</div>
