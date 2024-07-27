@@ -19,8 +19,11 @@ export class RemixClientService {
         return this.client.call('fileManager', 'readdir', dir);
     }
 
-    async currentFile(): Promise<string> {
-        return this.client.call('fileManager', 'getCurrentFile');
+    async compile(filename: string): Promise<any> {
+        // await this.client.call('solidity', 'compile', filename);
+        const res = await this.client.call('solidity', 'getCompilationResult');
+        console.log(res);
+        return res.data?.sources[filename].ast;
     }
 
     private async subscribeCurrentFile() {

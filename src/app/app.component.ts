@@ -22,9 +22,9 @@ export class AppComponent implements OnInit, OnDestroy {
         });
     }
 
-    loadFiles(): void {
-        this.clientService.listdir().then(files => {
-            this.files = Object.keys(files);
+    compile(): void {
+        this.clientService.compile(this.currentFile).then((obj) => {
+            // console.log(obj);
         });
     }
 
