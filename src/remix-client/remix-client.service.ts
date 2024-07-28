@@ -9,10 +9,7 @@ export class RemixClientService {
     private currentFileSubject = new Subject<string>();
 
     constructor(private client: RemixClient) {
-        this.client.onload(async () => {
-            console.log('Client loaded');
-            this.subscribeCurrentFile();
-        });
+        this.client.onload(() => this.subscribeCurrentFile());
     }
 
     private async subscribeCurrentFile() {

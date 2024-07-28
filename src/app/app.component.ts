@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 })
 export class AppComponent implements OnInit, OnDestroy {
     currentFile: string = 'No file selected';
-    private subscription!: Subscription;
+    private subscription?: Subscription;
 
     constructor(private clientService: RemixClientService) { }
 
@@ -21,6 +21,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+        this.subscription?.unsubscribe();
     }
 }

@@ -8,7 +8,6 @@ import { Injectable } from '@angular/core';
 export class RemixClient extends PluginClient {
     constructor() {
         super();
-        console.log("Creating client");
         createClient(this);
     }
 }
