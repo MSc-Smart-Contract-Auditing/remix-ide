@@ -1,17 +1,24 @@
 import { RemixClient } from './remix-client';
+import { Subject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 @Injectable({
     providedIn: 'root'
 })
 export class RemixClientService {
+    private currentFileSubject = new Subject<string>();
+
     constructor(private client: RemixClient) {
+        this.client.onload(() => this.subscribeCurrentFile());
     }
 
-    async connect() {
-        this.client.onload(async () => {
-            // const data = client.call('filemanager', 'readFile', 'ballot.sol');
-            console.log('Client loaded');
+    private async subscribeCurrentFile() {
+        this.client.on('fileManager', 'currentFileChanged', (fileName: string) => {
+            this.currentFileSubject.next(fileName);
         });
+    }
+
+    getCurrentFileObservable(): Observable<string> {
+        return this.currentFileSubject.asObservable();
     }
 }
