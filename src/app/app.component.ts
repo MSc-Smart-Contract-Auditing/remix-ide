@@ -9,10 +9,8 @@ import { Subscription } from 'rxjs';
     styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, OnDestroy {
-    title = 'remix-plugin2';
-    files: string[] = [];
     currentFile: string = 'No file selected';
-    private subscription?: Subscription;
+    private subscription!: Subscription;
 
     constructor(private clientService: RemixClientService) { }
 
@@ -22,13 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
         });
     }
 
-    loadFiles(): void {
-        this.clientService.listdir().then(files => {
-            this.files = Object.keys(files);
-        });
-    }
-
     ngOnDestroy(): void {
-        this.subscription?.unsubscribe();
+        this.subscription.unsubscribe();
     }
 }

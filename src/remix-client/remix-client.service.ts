@@ -15,14 +15,6 @@ export class RemixClientService {
         });
     }
 
-    async listdir(dir: string = '/'): Promise<string[]> {
-        return this.client.call('fileManager', 'readdir', dir);
-    }
-
-    async currentFile(): Promise<string> {
-        return this.client.call('fileManager', 'getCurrentFile');
-    }
-
     private async subscribeCurrentFile() {
         this.client.on('fileManager', 'currentFileChanged', (fileName: string) => {
             this.currentFileSubject.next(fileName);
