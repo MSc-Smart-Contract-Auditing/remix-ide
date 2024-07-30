@@ -9,8 +9,6 @@ import { Subscription } from 'rxjs';
     styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, OnDestroy {
-    title = 'remix-plugin2';
-    files: string[] = [];
     currentFile: string = 'No file selected';
     private subscription?: Subscription;
 

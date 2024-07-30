@@ -9,21 +9,7 @@ export class RemixClientService {
     private currentFileSubject = new Subject<string>();
 
     constructor(private client: RemixClient) {
-        this.client.onload(async () => {
-            console.log('Client loaded');
-            this.subscribeCurrentFile();
-        });
-    }
-
-    async listdir(dir: string = '/'): Promise<string[]> {
-        return this.client.call('fileManager', 'readdir', dir);
-    }
-
-    async compile(filename: string): Promise<any> {
-        // await this.client.call('solidity', 'compile', filename);
-        const res = await this.client.call('solidity', 'getCompilationResult');
-        console.log(res);
-        return res.data?.sources[filename].ast;
+        this.client.onload(() => this.subscribeCurrentFile());
     }
 
     private async subscribeCurrentFile() {
@@ -34,5 +20,12 @@ export class RemixClientService {
 
     getCurrentFileObservable(): Observable<string> {
         return this.currentFileSubject.asObservable();
+    }
+
+    async compile(filename: string): Promise<any> {
+        // await this.client.call('solidity', 'compile', filename);
+        const res = await this.client.call('solidity', 'getCompilationResult');
+        console.log(res);
+        return res.data?.sources[filename].ast;
     }
 }
