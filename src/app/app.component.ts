@@ -24,7 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     compile(): void {
         this.clientService.compile(this.currentFile).then((obj) => {
-            // console.log(obj);
+            console.log(obj);
         });
     }
 
