@@ -7,6 +7,7 @@ import { Injectable } from '@angular/core';
 })
 export class RemixClientService {
     private currentFileSubject = new Subject<string>();
+    currentFile$ = this.currentFileSubject.asObservable();
 
     constructor(private client: RemixClient) {
         this.client.onload(() => this.subscribeCurrentFile());
@@ -16,10 +17,6 @@ export class RemixClientService {
         this.client.on('fileManager', 'currentFileChanged', (fileName: string) => {
             this.currentFileSubject.next(fileName);
         });
-    }
-
-    getCurrentFileObservable(): Observable<string> {
-        return this.currentFileSubject.asObservable();
     }
 
     async compile(filename: string): Promise<any> {

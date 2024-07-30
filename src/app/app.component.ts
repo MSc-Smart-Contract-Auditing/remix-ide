@@ -15,7 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
     constructor(private clientService: RemixClientService) { }
 
     ngOnInit(): void {
-        this.subscription = this.clientService.getCurrentFileObservable().subscribe(filename => {
+        this.subscription = this.clientService.currentFile$.subscribe(filename => {
             this.currentFile = filename;
         });
     }
