@@ -21,9 +21,8 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     compile(): void {
-        this.clientService.compile(this.currentFile).then((obj) => {
-            console.log(obj);
-        });
+        this.clientService.compile(this.currentFile)
+            .then((result: any) => { console.log(result); });
     }
 
     ngOnDestroy(): void {

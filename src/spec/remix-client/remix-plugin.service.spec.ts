@@ -3,6 +3,7 @@ import { RemixClientService } from "../../remix-client/remix-client.service";
 import { TestBed } from "@angular/core/testing";
 import { MockRemixClient } from "../mocks/remix-client";
 import { RemixClient } from "../../remix-client/remix-client";
+import { Contract } from "../../app/models/contract.model";
 
 describe('RemixClientService', () => {
     let service: RemixClientService;
@@ -21,7 +22,7 @@ describe('RemixClientService', () => {
 
     it('should emit current file changes', (done) => {
         const expectedFileName = 'example.sol';
-        const sub = service.getCurrentFileObservable().subscribe(fileName => {
+        const sub = service.currentFile$.subscribe(fileName => {
             expect(fileName).toBe(expectedFileName);
             done();
         });
