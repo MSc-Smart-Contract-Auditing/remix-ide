@@ -3,6 +3,7 @@ import { AppComponent } from '../../app/app.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { RemixClientService } from '../../app/remix-client/remix-client.service';
 import { MockRemixClientService } from '../mocks/remix-client.service';
+import { SpinnerModule } from '../../app/spinner/spinner.module';
 
 describe('AppComponent', () => {
 
@@ -15,6 +16,7 @@ describe('AppComponent', () => {
             ],
             imports: [
                 BrowserModule,
+                SpinnerModule,
             ],
             providers: [
                 { provide: RemixClientService, useValue: mockRemixService }

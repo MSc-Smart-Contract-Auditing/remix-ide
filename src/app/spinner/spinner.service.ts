@@ -28,6 +28,10 @@ export class SpinnerService {
         this.processQueue();
     }
 
+    getMinDisplayTime(): number {
+        return this.minDisplayTime;
+    }
+
     private processQueue(): void {
         if (this.isProcessing || this.queue.length === 0) return;
 
