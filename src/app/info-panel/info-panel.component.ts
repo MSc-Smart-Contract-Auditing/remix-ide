@@ -13,7 +13,6 @@ import { Element } from '../utils/text-format.utils';
 export class InfoPanelComponent implements OnDestroy {
 	private subHandler = new SubscriptionHandler();
 	filename?: string = undefined;
-	body?: string = undefined;
 	loading: boolean = false;
 	elements: Element[] = [];
 
@@ -26,17 +25,7 @@ export class InfoPanelComponent implements OnDestroy {
 
 		this.subHandler.reg(
 			this.infoPanelService.text$.subscribe((text) => {
-				this.body = "function foo();";
-				const dummy = `Hello this is the first block \`function foo()\`
-Here we have a block of code:
-\`\`\`
-function a() {
-    console.log("Howdy?");
-}
-\`\`\`
-`;
-				this.elements = textToElements(dummy);
-
+				this.elements = textToElements(text);
 				console.log(this.elements);
 			})
 		);

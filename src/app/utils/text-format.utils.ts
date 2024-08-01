@@ -23,6 +23,16 @@ function consume(text: string, currentPosition: number): { consumed: string, new
     return { consumed, newPosition, type };
 }
 
+function handleNewlines(elements: Element[]): Element[] {
+    for (let element of elements) {
+        if (element.type === Type.text) {
+            element.value = element.value.replace(/\n/g, "<br>");
+        }
+    }
+
+    return elements;
+}
+
 export function textToElements(text: string): Element[] {
     const elements: Element[] = [];
     let currentPosition = 0;
@@ -41,5 +51,5 @@ export function textToElements(text: string): Element[] {
         currentPosition = newPosition;
     }
 
-    return elements;
+    return handleNewlines(elements);
 }

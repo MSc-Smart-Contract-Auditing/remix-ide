@@ -19,9 +19,7 @@
                                   [highlight]="element.value"
                                   language="javascript">
                             </code>
-                            <ng-container *ngIf="element.type === 'text'">
-                                {{ element.value }}
-                            </ng-container>
+                            <span *ngIf="element.type === 'text'" [innerHTML]="element.value"></span>
                         </ng-container>
                     </div>
                 </div>
