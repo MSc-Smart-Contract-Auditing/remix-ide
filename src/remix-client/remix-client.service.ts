@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { finalize, tap, take } from 'rxjs';
 import { prepareObject } from '../app/utils/contract.utils';
 import { CompilationResult } from '../app/models/contract.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -12,38 +13,35 @@ export class RemixClientService {
     private currentFileSubject = new Subject<string>();
     currentFile$ = this.currentFileSubject.asObservable();
     private currentTargetFile?: string = undefined;
-    private compilationResult$ = new Subject<CompilationResult>();
+    private compilationResultSubject = new Subject<CompilationResult>();
+    analysis$!: Observable<any>;
 
     constructor(private client: RemixClient) {
         this.client.onload(() => {
             this.registerCurrentFileEvent();
             this.registerCompilationEvent();
         });
+
+        this.analysis$ = this.generateAnalysisObservable();
     }
 
-    private async registerCurrentFileEvent() {
+    private registerCurrentFileEvent() {
         this.client.on('fileManager', 'currentFileChanged', (fileName: string) => {
             this.currentFileSubject.next(fileName);
         });
     }
 
-    private async registerCompilationEvent() {
+    private registerCompilationEvent() {
         this.client.on('solidity', 'compilationFinished', (target, source, _, data) => {
             // Check if compilation is triggered by the extension
             if (this.currentTargetFile !== target) return;
-
             this.currentTargetFile = undefined;
-            this.compilationResult$.next(prepareObject(source, data, target));
+            this.compilationResultSubject.next(prepareObject(source, data, target));
         });
     }
 
-    compile(filename: string): Promise<any> {
-        this.currentTargetFile = filename;
-        this.client.call('solidity', 'compile', filename);
-
-        console.log("Compiling...");
-        const observable = this.compilationResult$.pipe(
-            take(1),
+    private generateAnalysisObservable() {
+        return this.compilationResultSubject.pipe(
             tap(() => console.log("Processing...")),
             // TODO: use the api to process the data
             // switchMap((compilation_result: any) => {
@@ -55,9 +53,13 @@ export class RemixClientService {
                 console.error('Error during compilation:', error);
                 throw error;
             }),
-            finalize(() => console.log("Analysis finished")),
+            finalize(() => console.log("Analysis  finished")),
         );
+    }
 
-        return lastValueFrom(observable);
+    compile(filename: string): void {
+        console.log("Compiling...");
+        this.currentTargetFile = filename;
+        this.client.call('solidity', 'compile', filename);
     }
 }

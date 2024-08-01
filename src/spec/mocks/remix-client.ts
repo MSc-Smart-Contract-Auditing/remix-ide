@@ -1,3 +1,5 @@
+import { mockTargetName, mockSource, mockData } from "./compilation-results";
+
 export class MockRemixClient {
     private eventListeners: { [key: string]: Function[]; } = {};
 
@@ -12,9 +14,15 @@ export class MockRemixClient {
         this.eventListeners[event].push(callback);
     }
 
-    triggerEvent(event: string, data: any) {
+    call(name: string, method: string, ...args: any[]) {
+        if (name === 'solidity' && method === 'compile') {
+            this.triggerEvent('compilationFinished', mockTargetName, mockSource, 'sol', mockData);
+        }
+    }
+
+    triggerEvent(event: string, ...args: any[]) {
         if (this.eventListeners[event]) {
-            this.eventListeners[event].forEach(callback => callback(data));
+            this.eventListeners[event].forEach(async callback => await callback(...args));
         }
     }
 }
