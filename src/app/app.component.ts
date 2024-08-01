@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RemixClientService } from '../remix-client/remix-client.service';
-import { Subscription } from 'rxjs';
 import { SubscriptionHandler } from './utils/subscriptions.utils';
 
 @Component({
@@ -10,10 +9,7 @@ import { SubscriptionHandler } from './utils/subscriptions.utils';
 })
 export class AppComponent implements OnInit, OnDestroy {
     currentFile: string = 'No file selected';
-
     private subHandler = new SubscriptionHandler();
-    private fileSubscription?: Subscription;
-    private analysisSubscription?: Subscription;
 
     constructor(private clientService: RemixClientService) { }
 
