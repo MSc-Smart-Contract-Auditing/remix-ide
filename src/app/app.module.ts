@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { RemixClientService } from './remix-client/remix-client.service';
 import { SpinnerService } from './spinner/spinner.service';
 import { SpinnerModule } from './spinner/spinner.module';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
     declarations: [
@@ -16,6 +17,7 @@ import { SpinnerModule } from './spinner/spinner.module';
     providers: [
         RemixClientService,
         SpinnerService,
+        provideAnimationsAsync(),
     ],
     bootstrap: [AppComponent]
 })
