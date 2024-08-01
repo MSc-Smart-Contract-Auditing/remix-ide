@@ -6,9 +6,9 @@
                     <h2 class="text-center">{{ filename }}</h2>
                 </div>
                 <div class="card-body">
-                    <ng-content></ng-content>
-                    <p *ngIf="!loading">{{ body }}</p>
-                    <!-- <p>{{ body }}</p> -->
+                    <!-- Forces rendering of the content even if not visible -->
+                    <ng-content id="spinnerContent"></ng-content>
+                    <p *ngIf="!loading" id="bodyContent">{{ body }}</p>
                 </div>
             </div>
         </div>

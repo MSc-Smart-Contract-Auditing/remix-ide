@@ -28,7 +28,6 @@ export class InfoPanelComponent implements OnDestroy {
 			})
 		);
 
-
 		this.subHandler.reg(
 			this.spinnerService.active$.subscribe((active) => {
 				this.loading = active;

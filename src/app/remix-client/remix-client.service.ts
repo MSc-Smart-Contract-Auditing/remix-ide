@@ -1,7 +1,7 @@
 import { RemixClient } from './remix-client';
 import { catchError, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { tap, switchMap, map, timer } from 'rxjs';
+import { tap, switchMap, map, timer, of } from 'rxjs';
 import { prepareObject } from '../utils/contract.utils';
 import { CompilationResult } from '../models/contract.model';
 import { Observable } from 'rxjs';
@@ -58,11 +58,12 @@ export class RemixClientService {
             //     return APP_ID.get('')
             // }),
             switchMap((compilationResult: CompilationResult) => {
-                return timer(10000).pipe(
-                    map(() => dummyResponse)
-                );
+                return of(compilationResult);
+                // return timer(1000).pipe(
+                //     map(() => dummyResponse)
+                // );
             }),
-            tap((resp) => this.infoPanelService.display(resp)),
+            tap((resp) => this.infoPanelService.display(dummyResponse)),
             tap(() => this.spinnerService.stop()),
             catchError((error) => {
                 console.error('Error during compilation:', error);
