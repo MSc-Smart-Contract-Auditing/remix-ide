@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { SpinnerModule } from './spinner/spinner.module';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { FileSelectorModule } from "./file-selector/file-selector.module";
+import { InfoPanelModule } from './info-panel/info-panel.module';
 
 @NgModule({
     declarations: [
@@ -12,7 +13,8 @@ import { FileSelectorModule } from "./file-selector/file-selector.module";
     imports: [
         BrowserModule,
         SpinnerModule,
-        FileSelectorModule
+        FileSelectorModule,
+        InfoPanelModule,
     ],
     providers: [
         provideAnimationsAsync(),
