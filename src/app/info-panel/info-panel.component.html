@@ -3,14 +3,29 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="text-center">{{ filename }}</h2>
+                    <h2 class="text-center">Audit of {{ filename }}</h2>
                 </div>
                 <div class="card-body">
                     <!-- Forces rendering of the content even if not visible -->
                     <ng-content id="spinnerContent"></ng-content>
-                    <p *ngIf="!loading" id="bodyContent">{{ body }}</p>
+                    <div *ngIf="!loading" id="body">
+                        <ng-container *ngFor="let element of elements">
+                            <!-- Block -->
+                            <pre
+                                 *ngIf="element.type === 'block'"><code [highlight]="element.value.trim()" language="javascript">
+                                 </code></pre>
+
+                            <!-- Inline -->
+                            <code
+                                  *ngIf="element.type === 'inline'"
+                                  [highlight]="element.value"
+                                  language="javascript">
+                            </code>
+                            <!-- Text -->
+                            <span *ngIf="element.type === 'text'" [innerHTML]="element.value"></span>
+                        </ng-container>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

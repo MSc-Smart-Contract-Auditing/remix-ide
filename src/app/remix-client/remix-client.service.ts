@@ -58,10 +58,10 @@ export class RemixClientService {
             //     return APP_ID.get('')
             // }),
             switchMap((compilationResult: CompilationResult) => {
-                return of(compilationResult);
-                // return timer(1000).pipe(
-                //     map(() => dummyResponse)
-                // );
+                // return of(compilationResult);
+                return timer(1).pipe(
+                    map(() => compilationResult)
+                );
             }),
             tap((resp) => this.infoPanelService.display(dummyResponse)),
             tap(() => this.spinnerService.stop()),
