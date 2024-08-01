@@ -8,7 +8,7 @@
                 <div class="card-body">
                     <!-- Forces rendering of the content even if not visible -->
                     <ng-content id="spinnerContent"></ng-content>
-                    <div *ngIf="!loading">
+                    <div *ngIf="!loading" id="body">
                         <ng-container *ngFor="let element of elements">
                             <!-- Block -->
                             <pre

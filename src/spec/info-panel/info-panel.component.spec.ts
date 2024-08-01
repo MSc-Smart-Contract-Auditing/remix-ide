@@ -4,6 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { SpinnerModule } from '../../app/spinner/spinner.module';
 import { FileSelectorModule } from '../../app/file-selector/file-selector.module';
 import { By } from '@angular/platform-browser';
+import { ElementType } from '../../app/utils/text-format.utils';
+import { textToElements } from '../../app/utils/text-format.utils';
 
 describe('InfoPanelComponent', () => {
     let component: InfoPanelComponent;
@@ -37,21 +39,21 @@ describe('InfoPanelComponent', () => {
     });
 
     it('should display body when body is set and loading is false', () => {
-        component.body = 'This is the body content';
+        component.elements = textToElements('This is the body content');
         component.filename = 'Test File';
         component.loading = false;
         fixture.detectChanges();
 
-        const bodyElement = fixture.debugElement.query(By.css('.card-body p#bodyContent')).nativeElement;
+        const bodyElement = fixture.debugElement.query(By.css('.card-body div#body')).nativeElement;
         expect(bodyElement.textContent).toContain('This is the body content');
     });
 
     it('should not display body when loading is true', () => {
-        component.body = 'This is the body content';
         component.loading = true;
+        component.filename = 'Test File';
         fixture.detectChanges();
 
-        const bodyElement = fixture.debugElement.query(By.css('.card-body p#bodyContent'));
+        const bodyElement = fixture.debugElement.query(By.css('div#body'));
         expect(bodyElement).toBeNull();
     });
 

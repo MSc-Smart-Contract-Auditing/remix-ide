@@ -1,17 +1,17 @@
 export const emptyResponse = `Got an empty response from the server. Please try again.`;
 
-export enum Type {
+export enum ElementType {
     block = 'block',
     inline = 'inline',
     text = 'text',
 }
 
 export interface Element {
-    type: Type;
+    type: ElementType;
     value: string;
 }
 
-function consume(text: string, currentPosition: number): { consumed: string, newPosition: number; type: Type; } {
+function consume(text: string, currentPosition: number): { consumed: string, newPosition: number; type: ElementType; } {
     let consumed = "";
 
     while (currentPosition < text.length && text[currentPosition] !== "`") {
@@ -19,15 +19,15 @@ function consume(text: string, currentPosition: number): { consumed: string, new
         currentPosition++;
     }
 
-    const type = text[currentPosition + 1] === "`" ? Type.block : Type.inline;
-    const newPosition = currentPosition + (type === Type.inline ? 1 : 3);
+    const type = text[currentPosition + 1] === "`" ? ElementType.block : ElementType.inline;
+    const newPosition = currentPosition + (type === ElementType.inline ? 1 : 3);
 
     return { consumed, newPosition, type };
 }
 
 function handleNewlines(elements: Element[]): Element[] {
     for (let element of elements) {
-        if (element.type === Type.text) {
+        if (element.type === ElementType.text) {
             element.value = element.value.replace(/\n/g, "<br>");
         }
     }
@@ -37,7 +37,7 @@ function handleNewlines(elements: Element[]): Element[] {
 
 function trimBlocks(elements: Element[]): Element[] {
     for (let element of elements) {
-        if (element.type === Type.block) {
+        if (element.type === ElementType.block) {
             element.value = element.value.trim();
         }
     }
@@ -48,7 +48,7 @@ function trimBlocks(elements: Element[]): Element[] {
 export function textToElements(text: string): Element[] {
     const elements: Element[] = [];
     let currentPosition = 0;
-    let currentType = Type.text;
+    let currentType = ElementType.text;
 
     text = text.trim();
 
@@ -57,7 +57,7 @@ export function textToElements(text: string): Element[] {
         elements.push({ type: currentType, value: consumed });
 
         if (currentType === type) {
-            currentType = Type.text;
+            currentType = ElementType.text;
         } else {
             currentType = type;
         }
@@ -67,7 +67,7 @@ export function textToElements(text: string): Element[] {
 
     if (elements.length == 0) {
         // TODO: Error handling
-        elements.push({ type: Type.text, value: emptyResponse });
+        elements.push({ type: ElementType.text, value: emptyResponse });
     }
 
     if (elements && elements[0].value === "") {
