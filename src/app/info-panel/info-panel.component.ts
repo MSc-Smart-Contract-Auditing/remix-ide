@@ -2,7 +2,8 @@ import { Component, OnDestroy } from '@angular/core';
 import { SpinnerService } from '../spinner/spinner.service';
 import { SubscriptionHandler } from '../utils/subscriptions.utils';
 import { InfoPanelService } from './info-panel.service';
-import { textToHTML } from '../utils/text-format.utils';
+import { textToElements } from '../utils/text-format.utils';
+import { Element } from '../utils/text-format.utils';
 
 @Component({
 	selector: 'app-info-panel',
@@ -14,6 +15,7 @@ export class InfoPanelComponent implements OnDestroy {
 	filename?: string = undefined;
 	body?: string = undefined;
 	loading: boolean = false;
+	elements: Element[] = [];
 
 	constructor(private infoPanelService: InfoPanelService, private spinnerService: SpinnerService) {
 		this.subHandler.reg(
@@ -24,7 +26,18 @@ export class InfoPanelComponent implements OnDestroy {
 
 		this.subHandler.reg(
 			this.infoPanelService.text$.subscribe((text) => {
-				this.body = textToHTML(text);
+				this.body = "function foo();";
+				const dummy = `Hello this is the first block \`function foo()\`
+Here we have a block of code:
+\`\`\`
+function a() {
+    console.log("Howdy?");
+}
+\`\`\`
+`;
+				this.elements = textToElements(dummy);
+
+				console.log(this.elements);
 			})
 		);
 

@@ -8,15 +8,23 @@
                 <div class="card-body">
                     <!-- Forces rendering of the content even if not visible -->
                     <ng-content id="spinnerContent"></ng-content>
-                    <pre *ngIf="!loading"><code [highlight]="body!" language="javascript"></code></pre>
                     <div *ngIf="!loading">
-                        <p>In the line <code [highlight]="'a = 20 * 3'" language="javascript"></code> the value of
-                            <code [highlight]="'a = 20 * 3'" language="javascript"></code> is <code [highlight]="'60'"
-                                  language="javascript"></code>
-                        </p>
+                        <ng-container *ngFor="let element of elements">
+                            <pre *ngIf="element.type === 'block'">
+                                <code [highlight]="element.value.trim()" language="javascript">
+                                </code>
+                            </pre>
+                            <code
+                                  *ngIf="element.type === 'inline'"
+                                  [highlight]="element.value"
+                                  language="javascript">
+                            </code>
+                            <ng-container *ngIf="element.type === 'text'">
+                                {{ element.value }}
+                            </ng-container>
+                        </ng-container>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
