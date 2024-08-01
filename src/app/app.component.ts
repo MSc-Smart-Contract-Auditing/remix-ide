@@ -10,17 +10,26 @@ import { Subscription } from 'rxjs';
 })
 export class AppComponent implements OnInit, OnDestroy {
     currentFile: string = 'No file selected';
-    private subscription?: Subscription;
+    private fileSubscription?: Subscription;
+    private analysisSubscription?: Subscription;
 
     constructor(private clientService: RemixClientService) { }
 
     ngOnInit(): void {
-        this.subscription = this.clientService.getCurrentFileObservable().subscribe(filename => {
+        this.fileSubscription = this.clientService.currentFile$.subscribe(filename => {
             this.currentFile = filename;
+        });
+        this.analysisSubscription = this.clientService.analysis$.subscribe((result: any) => {
+            console.log(result);
         });
     }
 
+    compile(): void {
+        this.clientService.compile(this.currentFile);
+    }
+
     ngOnDestroy(): void {
-        this.subscription?.unsubscribe();
+        this.fileSubscription?.unsubscribe();
+        this.analysisSubscription?.unsubscribe();
     }
 }
