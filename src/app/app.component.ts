@@ -1,31 +1,38 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RemixClientService } from './remix-client/remix-client.service';
 import { SubscriptionHandler } from './utils/subscriptions.utils';
+import { SpinnerService } from './spinner/spinner.service';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnDestroy {
+    // TODO: Do NOT allow to compile if no file is selected
     currentFile: string = 'No file selected';
     private subHandler = new SubscriptionHandler();
     active = true;
 
-    constructor(private clientService: RemixClientService) { }
+    constructor(private clientService: RemixClientService, private spinnerService: SpinnerService) {
+        this.subHandler.reg(
+            this.clientService.currentFile$.subscribe(filename => {
+                if (this.active) this.currentFile = filename;
+            })
+        );
 
-    ngOnInit(): void {
-        this.subHandler.reg(this.clientService.currentFile$.subscribe(filename => {
-            if (this.active) this.currentFile = filename;
-        }));
+        this.subHandler.reg(
+            this.clientService.analysis$.subscribe((result: any) => {
+                console.log(result);
+            })
+        );
 
-        this.subHandler.reg(this.clientService.analysis$.subscribe((result: any) => {
-            console.log(result);
-        }));
+        this.subHandler.reg(
+            this.spinnerService.active$.subscribe(active => { this.active = !active; })
+        );
     }
 
     compile(): void {
-        this.active = false;
         this.clientService.compile(this.currentFile);
     }
 

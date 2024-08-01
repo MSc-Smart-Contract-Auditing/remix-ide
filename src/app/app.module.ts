@@ -16,7 +16,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     ],
     providers: [
         RemixClientService,
-        SpinnerService,
         provideAnimationsAsync(),
     ],
     bootstrap: [AppComponent]

@@ -1,10 +1,12 @@
 import { RemixClient } from './remix-client';
 import { catchError, lastValueFrom, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { finalize, tap, take } from 'rxjs';
+import { finalize, tap, of, switchMap } from 'rxjs';
 import { prepareObject } from '../utils/contract.utils';
 import { CompilationResult } from '../models/contract.model';
 import { Observable } from 'rxjs';
+import { SpinnerService } from '../spinner/spinner.service';
+import { SpinnerMessage } from '../models/spinner-state.model';
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +18,7 @@ export class RemixClientService {
     private compilationResultSubject = new Subject<CompilationResult>();
     analysis$!: Observable<any>;
 
-    constructor(private client: RemixClient) {
+    constructor(private client: RemixClient, private spinnerService: SpinnerService) {
         this.client.onload(() => {
             this.registerCurrentFileEvent();
             this.registerCompilationEvent();
@@ -36,29 +38,36 @@ export class RemixClientService {
             // Check if compilation is triggered by the extension
             if (this.currentTargetFile !== target) return;
             this.currentTargetFile = undefined;
-            this.compilationResultSubject.next(prepareObject(source, data, target));
+
+            setTimeout(() => {
+                this.compilationResultSubject.next(prepareObject(source, data, target));
+            }, 1000);
+
         });
     }
 
     private generateAnalysisObservable() {
         return this.compilationResultSubject.pipe(
-            tap(() => console.log("Processing...")),
+            tap(() => this.spinnerService.show(SpinnerMessage.analyzing)),
             // TODO: use the api to process the data
             // switchMap((compilation_result: any) => {
             //     call the api with the object
             //     req = this.prepareObject(compilation_result, filename);
             //     return APP_ID.get('')
             // }),
+            switchMap((compilationResult: CompilationResult) => {
+                return of(compilationResult);
+            }),
             catchError((error) => {
                 console.error('Error during compilation:', error);
                 throw error;
             }),
-            finalize(() => console.log("Analysis  finished")),
+            tap(() => this.spinnerService.stop()),
         );
     }
 
     compile(filename: string): void {
-        console.log("Compiling...");
+        this.spinnerService.show(SpinnerMessage.compiling);
         this.currentTargetFile = filename;
         this.client.call('solidity', 'compile', filename);
     }

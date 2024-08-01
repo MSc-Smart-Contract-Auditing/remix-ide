@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { SpinnerComponent } from './spinner.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-
 @NgModule({
     declarations: [
         SpinnerComponent,
