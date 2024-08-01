@@ -10,15 +10,14 @@ import { SpinnerService } from '../spinner/spinner.service';
     styleUrl: './file-selector.component.scss'
 })
 export class FileSelectorComponent implements OnDestroy {
-    // TODO: Do NOT allow to compile if no file is selected
     currentFile: string = 'No file selected';
     private subHandler = new SubscriptionHandler();
-    active = true;
+    buttonDisabled = false;
 
     constructor(private clientService: RemixClientService, private spinnerService: SpinnerService) {
         this.subHandler.reg(
             this.clientService.currentFile$.subscribe(filename => {
-                if (this.active) this.currentFile = filename;
+                this.currentFile = filename;
             })
         );
 
@@ -29,11 +28,14 @@ export class FileSelectorComponent implements OnDestroy {
         );
 
         this.subHandler.reg(
-            this.spinnerService.active$.subscribe(active => { this.active = !active; })
+            this.spinnerService.active$.subscribe(active => {
+                this.buttonDisabled = active;
+            })
         );
     }
 
     compile(): void {
+        if (this.currentFile === 'No file selected') return;
         this.clientService.compile(this.currentFile);
     }
 
