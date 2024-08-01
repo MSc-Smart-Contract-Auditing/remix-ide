@@ -1,3 +1,5 @@
+export const emptyResponse = `Got an empty response from the server. Please try again.`;
+
 export enum Type {
     block = 'block',
     inline = 'inline',
@@ -33,10 +35,22 @@ function handleNewlines(elements: Element[]): Element[] {
     return elements;
 }
 
+function trimBlocks(elements: Element[]): Element[] {
+    for (let element of elements) {
+        if (element.type === Type.block) {
+            element.value = element.value.trim();
+        }
+    }
+
+    return elements;
+}
+
 export function textToElements(text: string): Element[] {
     const elements: Element[] = [];
     let currentPosition = 0;
     let currentType = Type.text;
+
+    text = text.trim();
 
     while (currentPosition < text.length) {
         let { consumed, newPosition, type } = consume(text, currentPosition);
@@ -51,5 +65,14 @@ export function textToElements(text: string): Element[] {
         currentPosition = newPosition;
     }
 
-    return handleNewlines(elements);
+    if (elements.length == 0) {
+        // TODO: Error handling
+        elements.push({ type: Type.text, value: emptyResponse });
+    }
+
+    if (elements && elements[0].value === "") {
+        elements.shift();
+    }
+
+    return trimBlocks(handleNewlines(elements));
 }

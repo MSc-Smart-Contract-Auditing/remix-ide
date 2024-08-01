@@ -10,15 +10,18 @@
                     <ng-content id="spinnerContent"></ng-content>
                     <div *ngIf="!loading">
                         <ng-container *ngFor="let element of elements">
-                            <pre *ngIf="element.type === 'block'">
-                                <code [highlight]="element.value.trim()" language="javascript">
-                                </code>
-                            </pre>
+                            <!-- Block -->
+                            <pre
+                                 *ngIf="element.type === 'block'"><code [highlight]="element.value.trim()" language="javascript">
+                                 </code></pre>
+
+                            <!-- Inline -->
                             <code
                                   *ngIf="element.type === 'inline'"
                                   [highlight]="element.value"
                                   language="javascript">
                             </code>
+                            <!-- Text -->
                             <span *ngIf="element.type === 'text'" [innerHTML]="element.value"></span>
                         </ng-container>
                     </div>
