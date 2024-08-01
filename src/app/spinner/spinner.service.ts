@@ -14,7 +14,7 @@ export class SpinnerService {
 
     private queue: SpinnerState[] = [];
     private isProcessing = false;
-    private readonly minDisplayTime = 100;
+    private readonly minDisplayTime = 500;
 
     constructor() { }
 
