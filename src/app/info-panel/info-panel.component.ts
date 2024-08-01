@@ -26,7 +26,6 @@ export class InfoPanelComponent implements OnDestroy {
 		this.subHandler.reg(
 			this.infoPanelService.text$.subscribe((text) => {
 				this.elements = textToElements(text);
-				console.log(this.elements);
 			})
 		);
 
