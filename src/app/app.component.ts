@@ -10,12 +10,13 @@ import { SubscriptionHandler } from './utils/subscriptions.utils';
 export class AppComponent implements OnInit, OnDestroy {
     currentFile: string = 'No file selected';
     private subHandler = new SubscriptionHandler();
+    active = true;
 
     constructor(private clientService: RemixClientService) { }
 
     ngOnInit(): void {
         this.subHandler.reg(this.clientService.currentFile$.subscribe(filename => {
-            this.currentFile = filename;
+            if (this.active) this.currentFile = filename;
         }));
 
         this.subHandler.reg(this.clientService.analysis$.subscribe((result: any) => {
@@ -24,6 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     compile(): void {
+        this.active = false;
         this.clientService.compile(this.currentFile);
     }
 

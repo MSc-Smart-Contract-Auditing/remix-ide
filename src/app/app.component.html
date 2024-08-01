@@ -8,7 +8,7 @@
                 <div class="card-body">
                     <p id="filename" class="text-center">{{ currentFile }}</p>
                     <div class="d-flex justify-content-center">
-                        <button class="btn btn-primary" (click)="compile()">Compile</button>
+                        <button class="btn btn-primary" (click)="compile()" [disabled]=!active>Compile</button>
                     </div>
                 </div>
             </div>
