@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 
 import { RemixClientService } from '../remix-client/remix-client.service';
 import { SubscriptionHandler } from '../utils/subscriptions.utils';
