@@ -2,12 +2,12 @@ import { Component, OnDestroy } from '@angular/core';
 import { SpinnerService } from '../spinner/spinner.service';
 import { SubscriptionHandler } from '../utils/subscriptions.utils';
 import { InfoPanelService } from './info-panel.service';
+import { textToHTML } from '../utils/text-format.utils';
 
 @Component({
 	selector: 'app-info-panel',
 	templateUrl: './info-panel.component.html',
 	styleUrl: './info-panel.component.scss',
-
 })
 export class InfoPanelComponent implements OnDestroy {
 	private subHandler = new SubscriptionHandler();
@@ -24,7 +24,7 @@ export class InfoPanelComponent implements OnDestroy {
 
 		this.subHandler.reg(
 			this.infoPanelService.text$.subscribe((text) => {
-				this.body = text;
+				this.body = textToHTML(text);
 			})
 		);
 

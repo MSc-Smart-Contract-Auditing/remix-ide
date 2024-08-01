@@ -8,7 +8,13 @@
                 <div class="card-body">
                     <!-- Forces rendering of the content even if not visible -->
                     <ng-content id="spinnerContent"></ng-content>
-                    <p *ngIf="!loading" id="bodyContent">{{ body }}</p>
+                    <pre *ngIf="!loading"><code [highlight]="body!" language="javascript"></code></pre>
+                    <div *ngIf="!loading">
+                        <p>In the line <code [highlight]="'a = 20 * 3'" language="javascript"></code> the value of
+                            <code [highlight]="'a = 20 * 3'" language="javascript"></code> is <code [highlight]="'60'"
+                                  language="javascript"></code>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

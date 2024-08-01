@@ -22,6 +22,7 @@
     "@angular/router": "^18.0.0",
     "@remixproject/engine-web": "^0.3.38",
     "@remixproject/plugin-webview": "^0.3.38",
+    "ngx-highlightjs": "^12.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
