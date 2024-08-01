@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { SpinnerMessage, SpinnerState } from '../models/spinner-state.model';
+import { emptySpinnerState, SpinnerMessage, SpinnerState } from '../models/spinner-state.model';
 import { map } from 'rxjs';
 
 
@@ -24,7 +24,7 @@ export class SpinnerService {
     }
 
     stop(): void {
-        this.queue.push({ active: false, message: SpinnerMessage.empty });
+        this.queue.push(emptySpinnerState);
         this.processQueue();
     }
 

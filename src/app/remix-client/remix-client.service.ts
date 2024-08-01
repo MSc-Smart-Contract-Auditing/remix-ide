@@ -1,12 +1,14 @@
 import { RemixClient } from './remix-client';
-import { catchError, lastValueFrom, Subject } from 'rxjs';
+import { catchError, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { finalize, tap, of, switchMap } from 'rxjs';
+import { tap, switchMap, map, timer } from 'rxjs';
 import { prepareObject } from '../utils/contract.utils';
 import { CompilationResult } from '../models/contract.model';
 import { Observable } from 'rxjs';
 import { SpinnerService } from '../spinner/spinner.service';
 import { SpinnerMessage } from '../models/spinner-state.model';
+import { InfoPanelService } from '../info-panel/info-panel.service';
+import { dummyResponse } from '../dummy-response';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +20,11 @@ export class RemixClientService {
     private compilationResultSubject = new Subject<CompilationResult>();
     analysis$!: Observable<any>;
 
-    constructor(private client: RemixClient, private spinnerService: SpinnerService) {
+    constructor(
+        private client: RemixClient,
+        private spinnerService: SpinnerService,
+        private infoPanelService: InfoPanelService,
+    ) {
         this.client.onload(() => {
             this.registerCurrentFileEvent();
             this.registerCompilationEvent();
@@ -38,11 +44,7 @@ export class RemixClientService {
             // Check if compilation is triggered by the extension
             if (this.currentTargetFile !== target) return;
             this.currentTargetFile = undefined;
-
-            setTimeout(() => {
-                this.compilationResultSubject.next(prepareObject(source, data, target));
-            }, 1000);
-
+            this.compilationResultSubject.next(prepareObject(source, data, target));
         });
     }
 
@@ -56,17 +58,21 @@ export class RemixClientService {
             //     return APP_ID.get('')
             // }),
             switchMap((compilationResult: CompilationResult) => {
-                return of(compilationResult);
+                return timer(10000).pipe(
+                    map(() => dummyResponse)
+                );
             }),
+            tap((resp) => this.infoPanelService.display(resp)),
+            tap(() => this.spinnerService.stop()),
             catchError((error) => {
                 console.error('Error during compilation:', error);
                 throw error;
             }),
-            tap(() => this.spinnerService.stop()),
         );
     }
 
     compile(filename: string): void {
+        this.infoPanelService.activate(filename);
         this.spinnerService.show(SpinnerMessage.compiling);
         this.currentTargetFile = filename;
         this.client.call('solidity', 'compile', filename);
