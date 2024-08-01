@@ -13,17 +13,14 @@ import { SpinnerMessage } from '../../app/models/spinner-state.model';
 describe('SpinnerComponent', () => {
     let component: SpinnerComponent;
     let fixture: ComponentFixture<SpinnerComponent>;
-    let spinnerService: MockSpinnerService;
+    const mockSpinnerService: MockSpinnerService = new MockSpinnerService();
 
     beforeEach(async () => {
-
-        spinnerService = new MockSpinnerService();
-
         await TestBed.configureTestingModule({
             declarations: [SpinnerComponent],
             imports: [SpinnerModule],
             providers: [
-                { provide: SpinnerService, useValue: spinnerService }
+                { provide: SpinnerService, useValue: mockSpinnerService }
             ]
         }).compileComponents();
 
@@ -43,7 +40,7 @@ describe('SpinnerComponent', () => {
     });
 
     it('should display the spinner and message when active', async () => {
-        spinnerService.statusSubject.next({ active: true, message: SpinnerMessage.compiling });
+        mockSpinnerService.statusSubject.next({ active: true, message: SpinnerMessage.compiling });
         fixture.detectChanges();
         const message = fixture.nativeElement.querySelector('h3#message');
         expect(message).toBeTruthy();
@@ -55,7 +52,7 @@ describe('SpinnerComponent', () => {
 
     it('should not display the spinner and message when inactive', () => {
         // Update the mock observable
-        spinnerService.statusSubject.next({ active: false, message: SpinnerMessage.empty });
+        mockSpinnerService.statusSubject.next({ active: false, message: SpinnerMessage.empty });
         fixture.detectChanges();
 
         const spinnerElement = fixture.debugElement.query(By.css('mat-progress-spinner'));
@@ -69,7 +66,7 @@ describe('SpinnerComponent', () => {
 
     it('should update the message when the spinner state changes', () => {
         // Update the mock observable
-        spinnerService.statusSubject.next({ active: true, message: SpinnerMessage.analyzing });
+        mockSpinnerService.statusSubject.next({ active: true, message: SpinnerMessage.analyzing });
         fixture.detectChanges();
 
         const messageElement = fixture.debugElement.query(By.css('h3#message'));

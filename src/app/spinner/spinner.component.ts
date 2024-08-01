@@ -12,7 +12,6 @@ export class SpinnerComponent {
 
     constructor(private spinnerService: SpinnerService) {
         this.spinnerService.status$.subscribe((state) => {
-            console.log("new state", state);
             this.active = state.active;
             this.message = state.message;
         });
