@@ -1,8 +1,8 @@
 
-import { RemixClientService } from "../../remix-client/remix-client.service";
+import { RemixClientService } from "../../app/remix-client/remix-client.service";
 import { TestBed } from "@angular/core/testing";
 import { MockRemixClient } from "../mocks/remix-client";
-import { RemixClient } from "../../remix-client/remix-client";
+import { RemixClient } from "../../app/remix-client/remix-client";
 import { Contract } from "../../app/models/contract.model";
 import { prepareObject } from "../../app/utils/contract.utils";
 import { mockData, mockSource, mockExtractedData, mockPreparedObject, mockTargetName } from "../mocks/compilation-results";

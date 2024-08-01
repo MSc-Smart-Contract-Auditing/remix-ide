@@ -2,8 +2,8 @@ import { RemixClient } from './remix-client';
 import { catchError, lastValueFrom, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { finalize, tap, take } from 'rxjs';
-import { prepareObject } from '../app/utils/contract.utils';
-import { CompilationResult } from '../app/models/contract.model';
+import { prepareObject } from '../utils/contract.utils';
+import { CompilationResult } from '../models/contract.model';
 import { Observable } from 'rxjs';
 
 @Injectable({

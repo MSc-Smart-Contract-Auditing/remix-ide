@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
-import { RemixClientService } from '../remix-client/remix-client.service';
+import { RemixClientService } from './remix-client/remix-client.service';
+import { SpinnerService } from './spinner/spinner.service';
+import { SpinnerModule } from './spinner/spinner.module';
 
 @NgModule({
     declarations: [
@@ -9,9 +11,11 @@ import { RemixClientService } from '../remix-client/remix-client.service';
     ],
     imports: [
         BrowserModule,
+        SpinnerModule,
     ],
     providers: [
-        RemixClientService
+        RemixClientService,
+        SpinnerService,
     ],
     bootstrap: [AppComponent]
 })

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from '../../app/app.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { RemixClientService } from '../../remix-client/remix-client.service';
+import { RemixClientService } from '../../app/remix-client/remix-client.service';
 import { MockRemixClientService } from '../mocks/remix-client.service';
 
 describe('AppComponent', () => {
