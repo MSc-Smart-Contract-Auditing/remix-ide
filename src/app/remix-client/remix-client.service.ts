@@ -9,6 +9,7 @@ import { SpinnerService } from '../spinner/spinner.service';
 import { SpinnerMessage } from '../models/spinner-state.model';
 import { InfoPanelService } from '../info-panel/info-panel.service';
 import { dummyResponse } from '../dummy-response';
+import { WebService } from '../web.service';
 
 @Injectable({
     providedIn: 'root'
@@ -24,6 +25,7 @@ export class RemixClientService {
         private client: RemixClient,
         private spinnerService: SpinnerService,
         private infoPanelService: InfoPanelService,
+        private webService: WebService,
     ) {
         this.client.onload(() => {
             this.registerCurrentFileEvent();
@@ -50,19 +52,16 @@ export class RemixClientService {
 
     private generateAnalysisObservable() {
         return this.compilationResultSubject.pipe(
-            tap(() => this.spinnerService.show(SpinnerMessage.analyzing)),
-            // TODO: use the api to process the data
-            // switchMap((compilation_result: any) => {
-            //     call the api with the object
-            //     req = this.prepareObject(compilation_result, filename);
-            //     return APP_ID.get('')
-            // }),
+            tap(() => this.spinnerService.show(SpinnerMessage.starting)),
             switchMap((compilationResult: CompilationResult) => {
-                // return of(compilationResult);
-                return timer(1).pipe(
-                    map(() => compilationResult)
-                );
+                return this.webService.health();
+                return this.webService.submitWork(compilationResult);
             }),
+            switchMap((response) => {
+                console.log('Response from the server:', response);
+                return of(response);
+            }),
+            tap(() => this.spinnerService.show(SpinnerMessage.analyzing)),
             tap((resp) => this.infoPanelService.display(dummyResponse)),
             tap(() => this.spinnerService.stop()),
             catchError((error) => {

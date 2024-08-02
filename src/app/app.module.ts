@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { SpinnerModule } from './spinner/spinner.module';
 import { FileSelectorModule } from "./file-selector/file-selector.module";
 import { InfoPanelModule } from './info-panel/info-panel.module';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 @NgModule({
     declarations: [
@@ -15,6 +16,9 @@ import { InfoPanelModule } from './info-panel/info-panel.module';
         FileSelectorModule,
         InfoPanelModule,
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+    ]
 })
 export class AppModule { }
