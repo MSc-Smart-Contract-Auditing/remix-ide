@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { CompilationResult } from './models/contract.model';
 import { environment } from '../environment';
 import { Observable } from 'rxjs';
-import { of } from 'rxjs';
+import { SpinnerService } from './spinner/spinner.service';
+import { InfoPanelService } from './info-panel/info-panel.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +14,10 @@ export class WebService {
     readonly apiUrl: string = environment.apiEndpoint;
     readonly workerSocket: string = environment.workerSocket;
 
-    constructor(private httpClient: HttpClient) { }
+    constructor(
+        private httpClient: HttpClient,
+        private spinnerService: SpinnerService,
+        private infoPanelService: InfoPanelService) { }
 
     submitWork(data: CompilationResult): Observable<any> {
         return this.httpClient.post(this.apiUrl + 'submit', data, { responseType: 'json' });
@@ -29,10 +33,18 @@ export class WebService {
 
         socket.onmessage = (event) => {
             console.log('WebSocket message received:', event.data);
+
+            const data = JSON.parse(event.data);
+
+            if (data.result) {
+                this.infoPanelService.display(data.result);
+                this.spinnerService.stop();
+            }
         };
 
         socket.onclose = (event) => {
             console.log('WebSocket connection closed:', event);
+            this.spinnerService.stop();
         };
 
         socket.onerror = (event) => {
