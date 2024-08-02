@@ -5,10 +5,8 @@ import { SpinnerModule } from '../../app/spinner/spinner.module';
 import { SpinnerService } from '../../app/spinner/spinner.service';
 import { MockSpinnerService } from '../mocks/spinner.service';
 
-import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { SpinnerMessage } from '../../app/models/spinner-state.model';
-import { FileSelectorModule } from '../../app/file-selector/file-selector.module';
 import { InfoPanelModule } from '../../app/info-panel/info-panel.module';
 import { InfoPanelService } from '../../app/info-panel/info-panel.service';
 import { InfoPanelComponent } from '../../app/info-panel/info-panel.component';
@@ -63,8 +61,8 @@ describe('SpinnerComponent', () => {
         const spinnerElement = fixture.debugElement.query(By.css('mat-progress-spinner'));
         const messageElement = fixture.debugElement.query(By.css('h5#message'));
 
-        expect(component.active).toBeFalse();
-        expect(component.message).toBe('');
+        expect(component.state.active).toBeFalse();
+        expect(component.state.message).toBe('');
         expect(spinnerElement).toBeFalsy();
         expect(messageElement).toBeFalsy();
     });
@@ -75,7 +73,7 @@ describe('SpinnerComponent', () => {
         fixture.detectChanges();
 
         const messageElement = fixture.debugElement.query(By.css('h5#message'));
-        expect(component.message).toBe(SpinnerMessage.analyzing);
+        expect(component.state.message).toBe(SpinnerMessage.analyzing);
         expect(messageElement.nativeElement.textContent).toContain(SpinnerMessage.analyzing);
     });
 });
