@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InfoPanelComponent } from './info-panel.component';
 import { SpinnerModule } from "../spinner/spinner.module";
-import { HighlightModule, provideHighlightOptions } from 'ngx-highlightjs';
+import { HighlightModule } from 'ngx-highlightjs';
 import { HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 
 @NgModule({

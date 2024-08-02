@@ -1,5 +1,6 @@
 export enum SpinnerMessage {
     compiling = 'Compiling contracts...',
+    starting = 'Starting analysis...',
     analyzing = 'Looking for vulnerabilities...',
     empty = '',
 }
