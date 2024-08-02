@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CompilationResult } from './models/contract.model';
 import { environment } from '../environment';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -11,8 +12,6 @@ export class WebService {
 
     readonly apiUrl: string = environment.apiEndpoint;
     readonly workerSocket: string = environment.workerSocket;
-
-    private socket?: WebSocket = undefined;
 
     constructor(private httpClient: HttpClient) { }
 

@@ -1,15 +1,16 @@
 import { RemixClient } from './remix-client';
 import { catchError, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { tap, switchMap, map, timer, of } from 'rxjs';
+import { tap, switchMap } from 'rxjs';
 import { prepareObject } from '../utils/contract.utils';
 import { CompilationResult } from '../models/contract.model';
 import { Observable } from 'rxjs';
 import { SpinnerService } from '../spinner/spinner.service';
 import { SpinnerMessage } from '../models/spinner-state.model';
 import { InfoPanelService } from '../info-panel/info-panel.service';
-import { dummyResponse } from '../dummy-response';
 import { WebService } from '../web.service';
+import { fromEventPattern } from 'rxjs';
+
 
 @Injectable({
     providedIn: 'root'
@@ -18,8 +19,6 @@ export class RemixClientService {
     private currentFileSubject = new Subject<string>();
     currentFile$ = this.currentFileSubject.asObservable();
     private currentTargetFile?: string = undefined;
-    private compilationResultSubject = new Subject<CompilationResult>();
-    analysis$!: Observable<any>;
 
     constructor(
         private client: RemixClient,
@@ -29,10 +28,10 @@ export class RemixClientService {
     ) {
         this.client.onload(() => {
             this.registerCurrentFileEvent();
-            this.registerCompilationEvent();
+            this.generateAnalysisObservable().subscribe((response: any) => {
+                this.webService.connectToWorker(response.socket);
+            });
         });
-
-        this.analysis$ = this.generateAnalysisObservable();
     }
 
     private registerCurrentFileEvent() {
@@ -41,30 +40,20 @@ export class RemixClientService {
         });
     }
 
-    private registerCompilationEvent() {
-        this.client.on('solidity', 'compilationFinished', (target, source, _, data) => {
-            // Check if compilation is triggered by the extension
-            if (this.currentTargetFile !== target) return;
-            this.currentTargetFile = undefined;
-            this.compilationResultSubject.next(prepareObject(source, data, target));
-        });
-    }
-
-    private generateAnalysisObservable() {
-        return this.compilationResultSubject.pipe(
-            tap(() => this.spinnerService.show(SpinnerMessage.starting)),
+    private generateAnalysisObservable(): Observable<any> {
+        return fromEventPattern<CompilationResult>(
+            handler => this.client.on('solidity', 'compilationFinished',
+                (target, source, _, data) => {
+                    if (this.currentTargetFile !== target) return;
+                    handler(prepareObject(source, data, target));
+                }
+            )
+        ).pipe(
+            tap(_ => this.spinnerService.show(SpinnerMessage.starting)),
             switchMap((compilationResult: CompilationResult) => {
-                console.log(compilationResult);
+                console.log("Files compiled. Submitting work...");
                 return this.webService.submitWork(compilationResult);
             }),
-            switchMap((response) => {
-                console.log('Response from the server:', response);
-                this.webService.connectToWorker(response.socket);
-                return of(response);
-            }),
-            tap(() => this.spinnerService.show(SpinnerMessage.analyzing)),
-            tap((resp) => this.infoPanelService.display(dummyResponse)),
-            tap(() => this.spinnerService.stop()),
             catchError((error) => {
                 console.error('Error during compilation:', error);
                 throw error;

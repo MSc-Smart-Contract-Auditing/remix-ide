@@ -22,12 +22,6 @@ export class FileSelectorComponent implements OnDestroy {
         );
 
         this.subHandler.reg(
-            this.clientService.analysis$.subscribe((result: any) => {
-                console.log(result);
-            })
-        );
-
-        this.subHandler.reg(
             this.spinnerService.active$.subscribe(active => {
                 this.buttonDisabled = active;
             })
