@@ -54,7 +54,7 @@ export class RemixClientService {
         return this.compilationResultSubject.pipe(
             tap(() => this.spinnerService.show(SpinnerMessage.starting)),
             switchMap((compilationResult: CompilationResult) => {
-                return this.webService.health();
+                console.log(compilationResult);
                 return this.webService.submitWork(compilationResult);
             }),
             switchMap((response) => {
