@@ -1,9 +1,10 @@
-<div class="container mt-5" *ngIf="active">
+<div class="container mt-5" *ngIf="state.active">
     <div class="row justify-content-center">
-        <mat-progress-spinner id="spinner" mode="indeterminate"></mat-progress-spinner>
+        <mat-progress-spinner id="spinner" [mode]="mode" [value]="value">
+        </mat-progress-spinner>
     </div>
     <br>
     <div class="row justify-content-center">
-        <h5 id="message">{{ message }}</h5>
+        <h5 id="message">{{ state.message }}</h5>
     </div>
 </div>

@@ -5,6 +5,8 @@ import { environment } from '../environment';
 import { Observable } from 'rxjs';
 import { SpinnerService } from './spinner/spinner.service';
 import { InfoPanelService } from './info-panel/info-panel.service';
+import { SpinnerMessage } from './models/spinner-state.model';
+import { stringToMessage } from './utils/spinner.utils';
 
 @Injectable({
     providedIn: 'root'
@@ -36,10 +38,21 @@ export class WebService {
 
             const data = JSON.parse(event.data);
 
-            if (data.result) {
+            if (data.done) {
                 this.infoPanelService.display(data.result);
                 this.spinnerService.stop();
+                return;
             }
+
+            const message: SpinnerMessage = stringToMessage(data.status);
+
+            if (data.progress) {
+                this.spinnerService.showDeterminate(message, data.progress);
+            } else {
+                this.spinnerService.show(message);
+            }
+
+
         };
 
         socket.onclose = (event) => {
