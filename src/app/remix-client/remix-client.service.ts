@@ -59,6 +59,7 @@ export class RemixClientService {
             }),
             switchMap((response) => {
                 console.log('Response from the server:', response);
+                this.webService.connectToWorker(response.socket);
                 return of(response);
             }),
             tap(() => this.spinnerService.show(SpinnerMessage.analyzing)),
