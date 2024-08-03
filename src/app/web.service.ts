@@ -51,8 +51,6 @@ export class WebService {
             } else {
                 this.spinnerService.show(message);
             }
-
-
         };
 
         socket.onclose = (event) => {
