@@ -10,7 +10,7 @@ import { SpinnerMessage } from '../models/spinner-state.model';
 import { InfoPanelService } from '../info-panel/info-panel.service';
 import { WebService } from '../web.service';
 import { fromEventPattern } from 'rxjs';
-import { ASTHandler } from '../utils/ast/handler';
+
 
 @Injectable({
     providedIn: 'root'
@@ -52,10 +52,7 @@ export class RemixClientService {
             tap(_ => this.spinnerService.show(SpinnerMessage.starting)),
             switchMap((compilationResult: CompilationResult) => {
                 console.log("Files compiled. Submitting work...");
-                this.spinnerService.show(SpinnerMessage.building_dt);
-                const workUnit = ASTHandler.processCompilationResult(compilationResult);
-                console.log("Work unit:", workUnit);
-                return this.webService.submitWork(workUnit);
+                return this.webService.submitWork(compilationResult);
             }),
             catchError((error) => {
                 console.error('Error during compilation:', error);
