@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { CompilationResult } from './models/contract.model';
 import { environment } from '../environment';
 import { Observable } from 'rxjs';
 import { SpinnerService } from './spinner/spinner.service';
 import { InfoPanelService } from './info-panel/info-panel.service';
 import { SpinnerMessage } from './models/spinner-state.model';
 import { stringToMessage } from './utils/spinner.utils';
-import { WorkUnit } from './models/ast.model';
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +21,7 @@ export class WebService {
         private spinnerService: SpinnerService,
         private infoPanelService: InfoPanelService) { }
 
-    submitWork(data: WorkUnit): Observable<any> {
+    submitWork(data: CompilationResult): Observable<any> {
         return this.httpClient.post(this.apiUrl + 'submit', data, { responseType: 'json' });
     }
 
