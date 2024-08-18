@@ -3,6 +3,8 @@ export enum SpinnerMessage {
     starting = 'Starting analysis...',
     building_dt = 'Building dependency tree...',
     analyzing = 'Detecting vulnerabilities...',
+    solving = 'Vulnerability detected. Solving...',
+    finalizing = 'Finalizing the audit...',
     default = 'Detecting vulnerabilities...',
     empty = '',
 }
